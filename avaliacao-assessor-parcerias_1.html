@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avaliação Assessor de Parcerias</title>
+<style>
+:root{--teal:#00A078;--teal-d:#007A5A;--teal-l:#E6F6F1;--lime:#A0F000;--bg:#F3F6F5;--card:#fff;--ink:#14231E;--muted:#5B6B66;--line:#DDE5E2;--ok:#0E9F6E;--ok-bg:#E6F6EF;--err:#D64545;--err-bg:#FCEBEB;--warn:#B7791F;--warn-bg:#FFF6E0;--shadow:0 6px 24px rgba(20,35,30,.08)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;min-height:100vh}
+button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);background:#fff;padding:10px 16px;font-weight:600;color:var(--ink);transition:transform .08s,background .15s}
+button:active{transform:scale(.98)}
+button.primary{background:var(--teal);border-color:var(--teal);color:#fff}
+button.primary:hover{background:var(--teal-d)}
+button.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,textarea{font:inherit;color:var(--ink)}
+.hidden{display:none!important}
+.screen{min-height:100vh}
+
+/* START */
+.hero{background:linear-gradient(135deg,var(--teal-d),var(--teal));color:#fff;padding:48px 16px 120px}
+.hero .in{max-width:760px;margin:0 auto}
+.tag{display:inline-block;background:var(--lime);color:#14231E;font-weight:700;font-size:12px;padding:4px 10px;border-radius:99px;letter-spacing:.04em;text-transform:uppercase}
+.hero h1{font-size:34px;line-height:1.15;margin:14px 0 8px}
+.hero p{margin:0;opacity:.9;max-width:560px}
+.start-card{max-width:760px;margin:-84px auto 40px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:28px;position:relative}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.stat{background:var(--teal-l);border-radius:12px;padding:14px;text-align:center}
+.stat b{display:block;font-size:26px;color:var(--teal-d);line-height:1.1}
+.stat span{font-size:13px;color:var(--muted)}
+.rules{margin:0 0 22px;padding-left:20px;color:var(--ink)}
+.rules li{margin:6px 0}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.field input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-size:16px}
+.field input:focus,textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.start-actions{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:12px;flex-wrap:wrap}
+.start-actions .primary{padding:14px 28px;font-size:16px}
+
+/* EXAM */
+.topbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.topbar .in{max-width:1080px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px}
+.who{font-size:13px;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who b{color:var(--ink)}
+.timer{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums;font-weight:800;font-size:22px;padding:6px 14px;border-radius:12px;background:var(--teal-l);color:var(--teal-d)}
+.timer.warn{background:var(--warn-bg);color:var(--warn)}
+.timer.crit{background:var(--err-bg);color:var(--err);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.timer svg{width:18px;height:18px}
+.tbar{height:4px;background:var(--line)}
+.tbar span{display:block;height:100%;background:var(--teal);transition:width 1s linear}
+.layout{max-width:1080px;margin:0 auto;padding:22px 16px 60px;display:grid;grid-template-columns:1fr 260px;gap:22px;align-items:start}
+.qcard{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:26px;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.qblock{font-size:12px;font-weight:700;color:var(--teal-d);text-transform:uppercase;letter-spacing:.04em}
+.badge{font-size:11px;font-weight:700;background:var(--warn-bg);color:var(--warn);border-radius:99px;padding:2px 8px;text-transform:uppercase}
+.qnum{font-size:13px;color:var(--muted);margin-bottom:10px}
+.qtext{font-size:20px;font-weight:650;line-height:1.35;margin:0 0 20px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:14px;align-items:flex-start;text-align:left;width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:12px;background:#fff;font-weight:500}
+.opt:hover{border-color:#9ED9C7;background:#FAFDFC}
+.opt .l{flex:0 0 30px;height:30px;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:800;color:var(--muted)}
+.opt.sel{border-color:var(--teal);background:var(--teal-l)}
+.opt.sel .l{background:var(--teal);color:#fff}
+textarea{width:100%;min-height:180px;border:2px solid var(--line);border-radius:12px;padding:14px;resize:vertical;font-size:16px}
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
+.kbd{font-size:12px;color:var(--muted);margin-top:14px;text-align:center}
+.kbd kbd{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-family:inherit}
+.side{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:18px;position:sticky;top:90px}
+.side h4{margin:0 0 4px;font-size:14px}
+.side .sub{font-size:12px;color:var(--muted);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.grid button{padding:0;height:34px;font-size:13px;border-radius:8px;font-weight:700}
+.grid button.ans{background:var(--teal);border-color:var(--teal);color:#fff}
+.grid button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.grid button.flag{border-color:var(--warn);color:var(--warn)}
+.grid button.ans.flag{background:var(--warn);border-color:var(--warn);color:#fff}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:12px 0}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.side .finish{width:100%;margin-top:6px}
+.flagbtn{font-size:13px;padding:6px 10px}
+.flagbtn.on{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.mobile-nav{display:none}
+
+.watch{background:#14231E;color:#fff;font-size:12.5px}
+.watch .in{max-width:1080px;margin:0 auto;padding:6px 16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.watch b{color:var(--lime)}
+.watch.hit{background:var(--err)}
+.watch.hit b{color:#fff}
+.fsbtn{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;padding:2px 10px;font-size:12px;border-radius:6px}
+.warnicon{width:56px;height:56px;border-radius:50%;background:var(--err-bg);color:var(--err);display:grid;place-items:center;font-size:28px;font-weight:800;margin-bottom:12px}
+/* MODAL */
+.modal{position:fixed;inset:0;background:rgba(10,20,16,.55);display:grid;place-items:center;z-index:50;padding:16px;animation:fade .2s}
+.modal .box{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:26px;box-shadow:var(--shadow)}
+.modal h3{margin:0 0 8px}
+.modal p{margin:0 0 16px;color:var(--muted)}
+.modal .row{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.modal input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:16px}
+.err-msg{color:var(--err);font-size:13px;min-height:18px;margin-bottom:8px}
+
+/* END */
+.end{max-width:640px;margin:0 auto;padding:56px 16px}
+.end .card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:32px;text-align:center}
+.check{width:72px;height:72px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;margin:0 auto 16px;animation:pop .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:scale(.3)}to{transform:scale(1)}}
+.end h2{margin:0 0 6px;font-size:26px}
+.end .sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.end .actions{display:grid;gap:10px}
+.wa{background:#25D366;border-color:#25D366;color:#fff}
+
+/* GESTOR */
+.gwrap{max-width:900px;margin:0 auto;padding:28px 16px 60px}
+.ghead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.ghead h2{margin:0}
+.panel{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:20px;margin:14px 0}
+.panel textarea{min-height:70px;font-size:13px;font-family:ui-monospace,monospace}
+.alert{background:var(--warn-bg);border:1px solid #F3D99B;border-radius:12px;padding:18px 20px}
+.alert h2{margin:0 0 8px;font-size:17px;color:#7A4F0E}
+.alert ul{margin:0;padding-left:20px}.alert li{margin:6px 0}
+.big{font-size:52px;font-weight:800;color:var(--teal-d);line-height:1}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:7px 8px;border-top:1px solid var(--line)}
+td:last-child{text-align:right;font-weight:700}
+.gq{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+.gq h4{margin:0 0 8px;font-size:15px}
+.gq .o{padding:6px 10px;border-radius:8px;margin:4px 0;font-size:14px;border:1px solid transparent}
+.gq .o.c{background:var(--ok-bg);border-color:var(--ok)}
+.gq .o.w{background:var(--err-bg);border-color:var(--err)}
+.gq .exp{font-size:13px;background:var(--teal-l);border-left:3px solid var(--teal);padding:8px 10px;border-radius:0 8px 8px 0;margin-top:8px}
+.pill{display:inline-block;font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px;margin-left:6px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.no{background:var(--err-bg);color:var(--err)}.pill.na{background:var(--bg);color:var(--muted)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;z-index:60;font-size:14px;animation:fade .2s}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static}
+  .grid{grid-template-columns:repeat(8,1fr)}
+}
+@media (max-width:560px){
+  .hero h1{font-size:26px}
+  .stats,.end .sum{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .stat b{font-size:20px}
+  .qtext{font-size:18px}
+  .qcard,.start-card{padding:20px}
+  .timer{font-size:18px;padding:5px 10px}
+  .kbd{display:none}
+  .grid{grid-template-columns:repeat(6,1fr)}
+}
+@media print{.topbar,.side,.nav,.kbd,button{display:none!important}}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<section class="screen" id="sStart">
+  <div class="hero"><div class="in">
+    <span class="tag">Cashback MaisTODOS · Campo Grande/MS</span>
+    <h1>Avaliação do Assessor de Parcerias</h1>
+    <p>Credenciamento, Pagamento pelo App, novo Pagamento via QR Code para postos e mercados, App do Assessor e rotina comercial.</p>
+  </div></div>
+  <div class="start-card">
+    <div class="stats">
+      <div class="stat"><b id="stQ">0</b><span>questões</span></div>
+      <div class="stat"><b id="stT">0</b><span>minutos</span></div>
+      <div class="stat"><b>2</b><span>min por questão</span></div>
+    </div>
+    <ul class="rules">
+      <li><b>Não saia desta página durante a prova.</b> Trocar de aba, abrir outro programa, minimizar ou recarregar fica registrado, com quantas vezes e quanto tempo ficou fora, e vai junto no resultado para o gestor.</li>
+      <li>O tempo começa quando você clicar em <b>Iniciar prova</b> e não pausa. Se fechar a página, o relógio continua correndo.</li>
+      <li>Você pode navegar entre as questões, mudar respostas e marcar as que quiser revisar.</li>
+      <li>As últimas questões são situações práticas: responda com suas palavras, como faria com o parceiro.</li>
+      <li>Quando o tempo acabar, a prova é finalizada automaticamente com o que estiver respondido.</li>
+      <li>No final, envie o resultado para o seu gestor pelo botão do WhatsApp.</li>
+    </ul>
+    <div class="field"><label for="inName">Seu nome completo</label><input id="inName" placeholder="Digite seu nome" autocomplete="name"></div>
+    <div class="start-actions">
+      <button class="ghost" onclick="openGestor()">🔒 Área do gestor</button>
+      <button class="primary" id="btnStart" onclick="startExam()">Iniciar prova →</button>
+    </div>
+  </div>
+</section>
+
+<!-- EXAM -->
+<section class="screen hidden" id="sExam">
+  <div class="topbar">
+    <div class="in">
+      <div class="who">Assessor: <b id="whoName"></b></div>
+      <div class="timer" id="timer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg><span id="tTxt">00:00</span></div>
+    </div>
+    <div class="tbar"><span id="tBar" style="width:100%"></span></div>
+    <div class="watch" id="watch"><div class="in"><span>🔒 Prova monitorada · não saia desta página</span><span>Saídas registradas: <b id="wCount">0</b> <button class="fsbtn hidden" id="fsBtn" onclick="goFS()">Tela cheia</button></span></div></div>
+  </div>
+  <div class="layout">
+    <div>
+      <div class="qcard" id="qcard"></div>
+      <div class="kbd">Atalhos: <kbd>A</kbd>–<kbd>D</kbd> responder · <kbd>←</kbd> <kbd>→</kbd> navegar</div>
+    </div>
+    <aside class="side">
+      <h4>Mapa da prova</h4>
+      <div class="sub" id="sideCount"></div>
+      <div class="grid" id="grid"></div>
+      <div class="legend"><span><i style="background:var(--teal)"></i>Respondida</span><span><i style="border:1px solid var(--warn)"></i>Revisar</span><span><i style="border:1px solid var(--line)"></i>Em branco</span></div>
+      <button class="primary finish" onclick="askFinish()">Finalizar prova</button>
+    </aside>
+  </div>
+</section>
+
+<!-- END -->
+<section class="screen hidden" id="sEnd">
+  <div class="end"><div class="card">
+    <div class="check"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2>Prova finalizada</h2>
+    <p id="endMsg" style="color:var(--muted);margin:0"></p>
+    <div class="sum">
+      <div class="stat"><b id="eAns">0</b><span>respondidas</span></div>
+      <div class="stat"><b id="eBlank">0</b><span>em branco</span></div>
+      <div class="stat"><b id="eTime">0</b><span>tempo usado</span></div>
+    </div>
+    <p style="font-size:14px;margin:0 0 18px">A correção é feita pelo gestor. Envie seu resultado agora:</p>
+    <div class="actions">
+      <button class="wa" onclick="sendWA()">Enviar resultado pelo WhatsApp</button>
+      <button onclick="copyResult()">Copiar resultado</button>
+      <button onclick="downloadResult()">Baixar resultado (.txt)</button>
+      <button class="ghost" onclick="openGestor()">🔒 Área do gestor</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- GESTOR -->
+<section class="screen hidden" id="sGestor">
+  <div class="gwrap">
+    <div class="ghead"><h2>Área do gestor</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button onclick="resetExam()">Liberar nova tentativa</button><button onclick="closeGestor()">Sair</button></div></div>
+    <div class="alert" id="gAlert"></div>
+    <div class="panel">
+      <b>Corrigir uma prova</b>
+      <p style="font-size:13px;color:var(--muted);margin:4px 0 10px">Cole aqui a mensagem que o assessor enviou (ou só a linha que começa com CDT1). Se a prova foi feita neste navegador, ela já aparece abaixo.</p>
+      <textarea id="gCode" placeholder="Cole o resultado aqui"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="primary" onclick="importCode()">Corrigir</button><button onclick="showKey()">Ver só o gabarito</button></div>
+    </div>
+    <div id="gOut"></div>
+  </div>
+</section>
+
+<div id="modal"></div>
+
+<script>
+const PUB=[{"t": "Programa e papel do assessor", "qs": [{"q": "Segundo o material oficial, qual é o papel do Assessor de Parcerias?", "o": ["Fazer a cobrança das mensalidades dos filiados", "Vender o plano do Cartão de TODOS dentro do estabelecimento parceiro", "Cuidar apenas do cadastro do parceiro no sistema", "Ser o elo entre o programa de Cashback e o Parceiro"]}, {"q": "Qual destes NÃO é um dos motivos apresentados para a chegada do App do Assessor?", "o": ["Evolução do programa de Cashback, com mais estratégia e organização", "Substituir as visitas presenciais por atendimento remoto", "Transformar visitas e conversas em inteligência comercial", "Credenciamento com foco em principalidade"]}, {"q": "Quais são os três grandes blocos da jornada do parceiro?", "o": ["Credenciamento, Ativação e Relacionamento/Desenvolvimento", "Cadastro, Contrato e Pagamento", "Lead, Negociação e Pós-venda", "Prospecção, Venda e Cobrança"]}]}, {"t": "Modalidade de credenciamento (regra atual)", "qs": [{"q": "Hoje, como deve ser credenciada uma ótica?", "o": ["O parceiro escolhe a modalidade", "Cashback fixo sem credenciamento", "Pagamento pelo App", "Leitura de Nota Fiscal"], "tag": "Atualizado"}, {"q": "Um restaurante quer entrar no programa. Qual modalidade você usa?", "o": ["Pagamento pelo App", "Leitura de Nota até o parceiro se adaptar", "Depende do faturamento do restaurante", "Leitura de Nota, porque é alimentação"], "tag": "Atualizado"}, {"q": "No Pagamento pelo App (farmácias, óticas, alimentação e outros), qual é a taxa paga pelo parceiro?", "o": ["R$ 99 de mensalidade + 2%", "3,5%", "5%", "2,5%"], "tag": "Novo"}, {"q": "A partir de outubro/2026, qual é o novo modelo para postos de combustível e supermercados?", "o": ["Continuam só em Leitura de Nota", "Não podem mais ser parceiros", "Pagamento pelo App igual aos demais, com 5%", "Pagamento via QR Code gerado no caixa do parceiro"], "tag": "Novo"}, {"q": "Depois da visita de negociação em que o parceiro aceita, onde você faz o credenciamento?", "o": ["Direto no HubSpot", "Na Página do Assessor, em Formulários de Credenciamento", "Por e-mail para a MaisTODOS", "Dentro do App do Assessor, no formulário de visita"]}]}, {"t": "Pagamento via QR Code: postos e mercados (Treinamento 05/10/2026)", "qs": [{"q": "Qual é a ÚNICA condição obrigatória para um posto ou mercado entrar no QR Code?", "o": ["Ter mais de 3 caixas", "Ter o TEF da Fiserv (SiTef) no ponto de venda", "Estar há mais de 1 ano no programa", "Ter maquininha da MaisTODOS"], "tag": "Novo"}, {"q": "O responsável do caixa não sabe dizer se tem o TEF da Fiserv. Como você confirma na hora?", "o": ["Não tem como saber, precisa esperar o técnico", "Pede o contrato da maquininha", "Compra um item barato e confere o cupom fiscal, que mostra o sistema (SiTef / Fiserv)", "Liga para a MaisTODOS"], "tag": "Novo"}, {"q": "Qual é a condição comercial do QR Code para postos e supermercados?", "o": ["5% de cashback, como no Pagamento pelo App", "R$ 99 de mensalidade + 2,5%", "1% de taxa + recarga mensal", "2,5% de taxa de sucesso + 1% de cashback ao filiado (3,5% no total), sem mensalidade"], "tag": "Novo"}, {"q": "O parceiro pergunta se vai pagar a taxa do Cartão de TODOS E a taxa da maquininha. Qual a resposta correta?", "o": ["Não. Na venda pelo QR Code do Cartão de TODOS, os 2,5% substituem a taxa da maquininha", "Depende da bandeira do cartão", "Só paga a da maquininha", "Sim, as duas taxas são cobradas"], "tag": "Novo"}, {"q": "Em quanto tempo o parceiro recebe as vendas feitas via QR Code?", "o": ["Na hora", "Em até 2 dias úteis", "Em até 60 dias", "Em até 30 dias"], "tag": "Novo"}, {"q": "Como fica a fidelidade do contrato no QR Code?", "o": ["Sem fidelidade, mas com aviso de 30 dias para cancelar, solicitado pelo próprio parceiro", "12 meses de fidelidade", "Multa de 50% das mensalidades restantes", "6 meses de fidelidade"], "tag": "Novo"}, {"q": "Depois que o QR Code é ativado no parceiro, o que acontece com as outras formas de pagamento do Cartão de TODOS nele?", "o": ["Só a leitura de nota continua", "O parceiro escolhe qual manter", "Deixam de existir: sem Pagamento pelo App tradicional, sem nota fiscal e sem lançamento manual de cashback", "Continuam todas funcionando"], "tag": "Novo"}, {"q": "Quem configura o meio de pagamento (configuração CardSE) no caixa do parceiro?", "o": ["O filiado", "O técnico/automação comercial do parceiro, seguindo o manual", "O assessor", "A MaisTODOS, remotamente"], "tag": "Novo"}, {"q": "Em quanto tempo chegam o número lógico e o manual por e-mail?", "o": ["Na hora do cadastro", "Só após a homologação", "Até 7 dias corridos", "Até 2 dias úteis após o parceiro cadastrar a loja na plataforma"], "tag": "Novo"}, {"q": "Para receber o manual e o número lógico em cópia, o que o assessor precisa ter?", "o": ["Acesso ao admin antigo", "Nada, chega automaticamente", "Cadastro no Portal de Campanhas (login com Google)", "Acesso ao HubSpot"], "tag": "Novo"}, {"q": "O técnico configurou o caixa numa quinta à tarde. Quando dá para fazer o teste de homologação?", "o": ["No dia seguinte, porque as atualizações sincronizam de madrugada", "Depois de 2 dias úteis", "Imediatamente", "Só na segunda-feira"], "tag": "Novo"}, {"q": "Na homologação, quem precisa estar presente e o que o assessor leva?", "o": ["Só o assessor, com a maquininha", "Assessor, responsável do parceiro e operador de caixa; celular com app do Cartão de TODOS ativo e cartão de crédito cadastrado", "Só o técnico do parceiro", "O gerente regional"], "tag": "Novo"}, {"q": "Quais pagamentos precisam ser aprovados no checklist de homologação?", "o": ["Pix e débito", "Só crédito", "Crédito, saldo de cashback e combinado, além de conferir se o cashback foi creditado", "Só saldo de cashback"], "tag": "Novo"}, {"q": "O QR Code expirou enquanto o filiado pagava. O que fazer?", "o": ["Voltar uma tela e gerar um novo QR Code", "Cancelar a venda", "Acionar o suporte MaisTODOS", "Lançar o cashback manualmente"], "tag": "Novo"}, {"q": "O Cartão de TODOS não aparece em Carteiras Digitais no PDV. Quem você aciona?", "o": ["O app do assessor", "A automação comercial do parceiro", "O regional", "Suporte MaisTODOS"], "tag": "Novo"}, {"q": "Qual é o roteiro de abordagem de 5 passos para posto ou mercado?", "o": ["Mapear, ligar, visitar, credenciar, positivar", "Cadastrar no app, agendar, visitar, credenciar, homologar", "Apresentar, negociar, assinar, cadastrar, ativar", "Confirmar TEF Fiserv, apresentar o QR Code, mostrar as telas, alinhar condições, iniciar cadastro na plataforma"], "tag": "Novo"}]}, {"t": "App do Assessor (Checkmob)", "qs": [{"q": "Qual é o nome do aplicativo que deve ser baixado?", "o": ["MaisTODOS Parceiros", "Checkmob", "Portal do Assessor", "HubSpot Mobile"]}, {"q": "Qual a diferença entre “Registro” e “Formulário” no app?", "o": ["Não há diferença", "Registro é só para parceiros ativos", "Registro exige check-in no local; Formulário não precisa de check-in", "Formulário exige check-in; Registro não"]}, {"q": "Quais atividades exigem check-in obrigatório no estabelecimento?", "o": ["Visita de Boas-vindas e Visita de Relacionamento/Pendências", "Tentativa de contato e negociação", "Nenhuma, o check-in é opcional", "Somente o cadastro do parceiro"]}, {"q": "O que acontece com uma visita de relacionamento enviada sem check-in?", "o": ["Fica pendente de aprovação", "É aceita normalmente", "Vira um formulário automaticamente", "É desconsiderada"]}, {"q": "Na visita de boas-vindas, como devem ser enviadas as fotos de positivação?", "o": ["Enviadas pelo WhatsApp do suporte", "Tiradas na hora, pelo app, durante a visita", "Pela galeria do celular depois da visita", "Não é necessário enviar fotos"]}, {"q": "Onde você deve registrar uma visita?", "o": ["No menu “Registros”", "Na página inicial, em Meus indicadores", "No menu “Formulários”", "No menu “Parceiros”, selecionando a empresa"]}, {"q": "Ao cadastrar um novo parceiro, quais campos o assessor NÃO preenche?", "o": ["Nome e CNPJ", "Setor de mercado e Tipo de parceria", "QA e Status Plataforma", "Endereço e telefone"]}, {"q": "Por que é importante sincronizar o app ao longo do dia?", "o": ["Porque a integração com o HubSpot não é instantânea e sem sincronizar há divergência e retrabalho", "Para economizar bateria", "Não é necessário, sincroniza sozinho em tempo real", "Para liberar novas funções"]}, {"q": "O status de QA do parceiro está “Rejeitado - Corrigir dados”. O que fazer?", "o": ["Abrir chamado no suporte do app", "Cadastrar o parceiro de novo", "Ver em Anotações quais dados corrigir e fazer a correção pela Página do Assessor", "Esperar a MaisTODOS resolver"]}, {"q": "Parceiro de Pagamento pelo App: qual status indica que o cadastro na plataforma terminou?", "o": ["Aguardando assinatura do contrato", "Amadurecimento", "Lead", "Plataforma concluída"]}, {"q": "Com que frequência deve acontecer a visita de relacionamento com o parceiro ativo?", "o": ["Mensal", "Só quando houver problema", "Semanal", "Trimestral"]}]}, {"t": "Página do Assessor e formulários", "qs": [{"q": "Um parceiro vai rodar uma campanha de Cashback Especial. Onde você atualiza isso?", "o": ["Formulários de Visita/Inadimplência", "Formulários de Campanhas", "Formulários de Credenciamento", "App do Assessor"]}, {"q": "Um parceiro inadimplente regularizou a situação. Onde registrar?", "o": ["Comunicados", "Formulários de Campanhas", "Materiais do Assessor", "Formulários de Visita/Inadimplência"]}, {"q": "Encontrou erro ou dúvida no App do Assessor. Qual o canal correto?", "o": ["Abrir avaliação na loja de apps", "E-mail para o gestor da unidade", "WhatsApp do Cashback ou Chat do Portal do Assessor", "Ligar para a central do Cartão de TODOS"]}]}, {"t": "Prospecção e Follow-up", "qs": [{"q": "Segundo o treinamento de Follow-up, o que é um bom acompanhamento comercial?", "o": ["Mandar lembretes até o parceiro responder", "Uma estratégia estruturada, com persistência inteligente e geração de valor a cada contato", "Esperar o parceiro procurar quando tiver interesse", "Ligar todos os dias no mesmo horário"]}, {"q": "Um lead parou de responder depois da primeira reunião. Qual a melhor conduta?", "o": ["Retomar com cadência, trazendo algo novo de valor e propondo um próximo passo claro", "Enviar a mesma proposta várias vezes", "Oferecer cashback maior sem consultar", "Descartar o lead"]}, {"q": "Por que é importante marcar corretamente as etapas do funil no app?", "o": ["Só para cumprir regra", "Para o parceiro acompanhar", "Para liberar o pagamento do cashback", "Gera dados para comparar a média nacional com a individual, apontar capacitação e reconhecer cases"]}]}, {"t": "Situações práticas (discussão)", "qs": [{"q": "Você está em uma farmácia de manipulação e o dono diz: “Prefiro o modelo de leitura de nota, é mais simples”. Como você conduz?"}, {"q": "Descreva, passo a passo no app, a jornada de um parceiro desde o primeiro contato até a visita de boas-vindas."}, {"q": "Um parceiro ativo há 3 meses quase não recebe filiados. O que você faz na próxima visita de relacionamento?"}, {"q": "Monte sua agenda semanal: como você divide os dias entre Credenciamento e Relacionamento/Desenvolvimento?"}, {"q": "Chegou um supermercado interessado. Conduza a conversa do início ao fim."}, {"q": "O dono do posto diz: “3,5% é caro, minha margem é apertada”. Como você responde?"}, {"q": "O parceiro disse que tem TEF da Fiserv e aceitou. Quais são os seus papéis daqui até a liberação para os filiados?"}], "open": true}];
+const ENC={salt:"YBNszd9E7O1lHXVQZG7WLA==",iv:"AKQWMvYIw2LtJao1",data:"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"};
+const MIN_PER_Q=2;
+const KEY="cdt-prova-assessor-v1";
+
+// flatten
+const Q=[];PUB.forEach((b,bi)=>b.qs.forEach(q=>Q.push({...q,bi,bt:b.t,open:!!b.open})));
+const TOTAL=Q.length, DURATION=TOTAL*MIN_PER_Q*60*1000;
+document.getElementById('stQ').textContent=TOTAL;
+document.getElementById('stT').textContent=TOTAL*MIN_PER_Q;
+
+let S=load()||{name:"",start:0,end:0,cur:0,ans:{},flag:{},done:false,auto:false};
+S.exits=S.exits||0;S.away=S.away||0;S.log=S.log||[];
+let tick=null, SECRET=null;
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function $(id){return document.getElementById(id)}
+function show(id){["sStart","sExam","sEnd","sGestor"].forEach(s=>$(s).classList.toggle('hidden',s!==id));window.scrollTo(0,0)}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+function fmt(ms){ms=Math.max(0,ms);const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+String(m).padStart(2,'0'):String(m).padStart(2,'0'))+':'+String(x).padStart(2,'0')}
+function isAns(i){const v=S.ans[i];return Q[i].open?(typeof v==="string"&&v.trim().length>0):(v!==undefined&&v!==null)}
+function answered(){let n=0;for(let i=0;i<TOTAL;i++)if(isAns(i))n++;return n}
+
+// START
+function startExam(){
+  const n=$('inName').value.trim();
+  if(n.length<3){$('inName').focus();toast('Digite seu nome para começar');return}
+  S={name:n,start:Date.now(),end:0,cur:0,ans:{},flag:{},done:false,auto:false,exits:0,away:0,log:[],leftAt:0};save();goFS();enterExam();
+}
+function enterExam(){show('sExam');$('whoName').textContent=S.name;buildGrid();render();runTimer();updWatch()}
+
+// MONITORAMENTO DE SAÍDA
+function inExam(){return S.start&&!S.done&&!$('sExam').classList.contains('hidden')}
+function goFS(){try{const el=document.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el)?.catch?.(()=>{})}catch(e){}}
+function updWatch(){$('wCount').textContent=S.exits;$('watch').classList.toggle('hit',S.exits>0);$('fsBtn').classList.toggle('hidden',!!document.fullscreenElement||!document.documentElement.requestFullscreen)}
+function markLeft(){if(!inExam()||S.leftAt)return;S.leftAt=Date.now();save()}
+function markBack(reload){if(!S.leftAt||S.done)return;const gone=Date.now()-S.leftAt;S.leftAt=0;
+  if(gone<1500&&!reload){save();return}
+  S.exits++;S.away+=gone;S.log.push({at:Date.now()-gone,ms:gone,r:!!reload});save();updWatch();
+  modal(`<div class="warnicon">!</div><h3>Você saiu da página da prova</h3><p>${reload?'A página foi fechada ou recarregada.':'Você trocou de aba, de janela ou de aplicativo.'} Esta é a <b>${S.exits}ª saída</b>, com ${fmt(gone)} fora da prova. O registro vai junto no seu resultado para o gestor.<br><br>O tempo da prova continua correndo.</p><div class="row"><button class="primary" onclick="closeModal();goFS()">Voltar para a prova</button></div>`)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)markLeft();else if(document.hasFocus())markBack(false)});
+window.addEventListener('blur',()=>markLeft());
+window.addEventListener('focus',()=>{if(!document.hidden)markBack(false)});
+window.addEventListener('pagehide',()=>markLeft());
+window.addEventListener('beforeunload',e=>{if(S.start&&!S.done){e.preventDefault();e.returnValue='A prova está em andamento. Se sair, isso será registrado.';return e.returnValue}});
+document.addEventListener('fullscreenchange',()=>{if(inExam())updWatch()});
+
+// TIMER
+function runTimer(){clearInterval(tick);const f=()=>{const left=S.start+DURATION-Date.now();
+  $('tTxt').textContent=fmt(left);$('tBar').style.width=Math.max(0,left/DURATION*100)+'%';
+  const t=$('timer');t.classList.toggle('warn',left<=10*60e3&&left>3*60e3);t.classList.toggle('crit',left<=3*60e3);
+  if(left<=0){clearInterval(tick);finish(true)}};f();tick=setInterval(f,1000)}
+
+// RENDER
+function render(){
+  const i=S.cur,q=Q[i];const c=$('qcard');
+  let h=`<div class="qmeta"><span class="qblock">${esc(q.bt)}</span>${q.tag?`<span class="badge">${esc(q.tag)}</span>`:''}</div>
+  <div class="qnum" style="display:flex;justify-content:space-between;align-items:center;gap:8px">Questão ${i+1} de ${TOTAL}<button class="flagbtn ${S.flag[i]?'on':''}" onclick="toggleFlag()">${S.flag[i]?'★ Marcada para revisar':'☆ Revisar depois'}</button></div>
+  <h2 class="qtext">${esc(q.q)}</h2>`;
+  if(q.open){h+=`<textarea id="ta" placeholder="Escreva sua resposta como explicaria ao parceiro ou ao gestor">${esc(S.ans[i]||'')}</textarea><div class="hint">Sua resposta é salva automaticamente.</div>`}
+  else{h+=`<div class="opts">`+q.o.map((o,k)=>`<button class="opt ${S.ans[i]===k?'sel':''}" onclick="pick(${k})"><span class="l">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`).join('')+`</div>`}
+  h+=`<div class="nav"><button onclick="go(-1)" ${i===0?'disabled':''}>← Anterior</button>${i<TOTAL-1?`<button class="primary" onclick="go(1)">Próxima →</button>`:`<button class="primary" onclick="askFinish()">Finalizar prova</button>`}</div>`;
+  c.innerHTML=h;c.style.animation='none';c.offsetHeight;c.style.animation='';
+  const ta=$('ta');if(ta){ta.addEventListener('input',()=>{S.ans[i]=ta.value;save();updGrid()})}
+  updGrid();
+}
+function pick(k){S.ans[S.cur]=k;save();render();if(S.cur<TOTAL-1)setTimeout(()=>{if(S.ans[S.cur]===k)go(1)},380)}
+function go(d){const n=S.cur+d;if(n<0||n>=TOTAL)return;S.cur=n;save();render()}
+function jump(i){S.cur=i;save();render()}
+function toggleFlag(){S.flag[S.cur]=!S.flag[S.cur];save();render()}
+function buildGrid(){$('grid').innerHTML=Q.map((q,i)=>`<button onclick="jump(${i})" title="${q.open?'Situação prática':'Objetiva'}">${i+1}</button>`).join('')}
+function updGrid(){[...$('grid').children].forEach((b,i)=>{b.className=(isAns(i)?'ans ':'')+(S.flag[i]?'flag ':'')+(i===S.cur?'cur':'')});
+  const a=answered();$('sideCount').textContent=`${a} de ${TOTAL} respondidas`}
+
+document.addEventListener('keydown',e=>{
+  if($('sExam').classList.contains('hidden')||$('modal').innerHTML)return;
+  if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
+  const k=e.key.toLowerCase();
+  if(k==='arrowright')go(1);else if(k==='arrowleft')go(-1);
+  else if(!Q[S.cur].open){const m={a:0,b:1,c:2,d:3,'1':0,'2':1,'3':2,'4':3}[k];if(m!==undefined&&m<Q[S.cur].o.length)pick(m)}
+});
+
+// FINISH
+function askFinish(){const a=answered(),bl=TOTAL-a,fl=Object.values(S.flag).filter(Boolean).length;
+  modal(`<h3>Finalizar a prova?</h3><p>${bl?`Você ainda tem <b>${bl}</b> questão(ões) em branco.`:'Todas as questões foram respondidas.'}${fl?` Há <b>${fl}</b> marcada(s) para revisar.`:''} Depois de finalizar, não é possível alterar.</p><div class="row"><button onclick="closeModal()">Voltar à prova</button><button class="primary" onclick="closeModal();finish(false)">Finalizar</button></div>`)}
+function finish(auto){if(S.done&&!auto)return;clearInterval(tick);if(!S.done){S.leftAt=0;S.done=true;S.auto=auto;S.end=Math.min(Date.now(),S.start+DURATION);save()}showEnd()}
+function showEnd(){show('sEnd');const a=answered();$('eAns').textContent=a;$('eBlank').textContent=TOTAL-a;$('eTime').textContent=fmt(S.end-S.start).replace(/:\d\d$/,m=>m)+'';
+  $('endMsg').textContent=S.auto?'O tempo acabou e a prova foi finalizada automaticamente.':`Obrigado, ${S.name.split(' ')[0]}. Suas respostas foram registradas.`}
+
+// RESULT
+function code(){const a=Q.map((q,i)=>q.open?(isAns(i)?'t':'-'):(isAns(i)?"ABCD"[S.ans[i]]:'-')).join('');
+  return `CDT1|${S.name.replace(/\|/g,' ')}|${S.start}|${S.end}|${a}|${S.exits}|${S.away}`}
+function resultText(){const d=new Date(S.start);let t=`*Avaliação Assessor de Parcerias*\nAssessor: ${S.name}\nData: ${d.toLocaleDateString('pt-BR')} ${d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}\nTempo usado: ${fmt(S.end-S.start)} de ${fmt(DURATION)}${S.auto?' (tempo esgotado)':''}\nRespondidas: ${answered()}/${TOTAL}\nSaídas da página: ${S.exits}${S.exits?` (tempo fora: ${fmt(S.away)})`:''}\n\n*Situações práticas*\n`;
+  Q.forEach((q,i)=>{if(q.open)t+=`\n${i+1}. ${q.q}\nR: ${(S.ans[i]||'(em branco)').trim()}\n`});
+  return t+`\n*Código de correção (não editar):*\n${code()}`}
+function sendWA(){window.open('https://wa.me/?text='+encodeURIComponent(resultText()),'_blank')}
+async function copyResult(){try{await navigator.clipboard.writeText(resultText());toast('Resultado copiado')}catch(e){modal(`<h3>Copie o resultado</h3><textarea style="min-height:200px">${esc(resultText())}</textarea><div class="row" style="margin-top:10px"><button onclick="closeModal()">Fechar</button></div>`)}}
+function downloadResult(){const b=new Blob([resultText()],{type:'text/plain'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`avaliacao-${S.name.split(' ')[0].toLowerCase()}.txt`;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+
+// MODAL
+function modal(h){$('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box">${h}</div></div>`}
+function closeModal(){$('modal').innerHTML=''}
+
+// GESTOR (dados criptografados com a senha)
+function b64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))}
+async function decrypt(pw){const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(ENC.salt),iterations:150000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const p=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(ENC.iv)},k,b64(ENC.data));return JSON.parse(new TextDecoder().decode(p))}
+function openGestor(){if(SECRET){enterGestor();return}
+  modal(`<h3>🔒 Área do gestor</h3><p>Digite a senha para ver gabarito e correção.</p><input type="password" id="pw" placeholder="Senha" onkeydown="if(event.key==='Enter')tryPw()"><div class="err-msg" id="pwErr"></div><div class="row"><button onclick="closeModal()">Cancelar</button><button class="primary" onclick="tryPw()">Entrar</button></div>`);setTimeout(()=>$('pw').focus(),50)}
+async function tryPw(){const pw=$('pw').value;try{SECRET=await decrypt(pw);closeModal();enterGestor()}catch(e){$('pwErr').textContent=window.crypto&&crypto.subtle?'Senha incorreta.':'Abra o arquivo no Chrome ou Edge para acessar.';$('pw').select()}}
+function enterGestor(){clearInterval(tick);show('sGestor');$('gAlert').innerHTML=SECRET.alert;
+  if(S.done){$('gCode').value=code();importCode()}else $('gOut').innerHTML=''}
+function closeGestor(){if(S.done)showEnd();else if(S.start)enterExam();else show('sStart')}
+function resetExam(){modal(`<h3>Liberar nova tentativa?</h3><p>Isso apaga a prova salva neste navegador e volta para a tela inicial.</p><div class="row"><button onclick="closeModal()">Cancelar</button><button class="primary" onclick="doReset()">Apagar e liberar</button></div>`)}
+function doReset(){try{localStorage.removeItem(KEY)}catch(e){}S={name:"",start:0,end:0,cur:0,ans:{},flag:{},done:false,auto:false,exits:0,away:0,log:[],leftAt:0};closeModal();$('inName').value='';show('sStart')}
+function importCode(){const raw=$('gCode').value;const m=raw.match(/CDT1\|([^|]*)\|(\d+)\|(\d+)\|([A-D\-t]+)(?:\|(\d+)\|(\d+))?/);
+  if(!m){toast('Código CDT1 não encontrado');return}
+  const [_,name,st,en,a,ex,aw]=m;if(a.length!==TOTAL){toast('Código incompleto');return}
+  renderCorrection({name,start:+st,end:+en,a,raw,exits:+(ex||0),away:+(aw||0)})}
+function showKey(){renderCorrection(null)}
+function renderCorrection(r){
+  let ok=0,obj=0;const perB={};let det='';
+  Q.forEach((q,i)=>{const b=perB[q.bi]=perB[q.bi]||{t:q.bt,ok:0,n:0,open:q.open};
+    if(q.open){const g=SECRET.guides[i];det+=`<div class="gq"><h4>${i+1}. ${esc(q.q)} ${r?(r.a[i]==='t'?'<span class="pill na">respondida</span>':'<span class="pill no">em branco</span>'):''}</h4>${r&&S.done&&S.start===r.start&&S.ans[i]?`<div class="o" style="background:var(--bg)">${esc(S.ans[i])}</div>`:''}<div class="exp"><b>O que esperar:</b><ul style="margin:4px 0 0;padding-left:18px">${g.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></div>`;return}
+    obj++;b.n++;const right=SECRET.ans[i];const got=r?r.a[i]:null;const gi=got&&got!=='-'?"ABCD".indexOf(got):-1;const hit=gi===right;if(hit){ok++;b.ok++}
+    det+=`<div class="gq"><h4>${i+1}. ${esc(q.q)} ${r?(hit?'<span class="pill ok">acertou</span>':gi<0?'<span class="pill na">em branco</span>':'<span class="pill no">errou</span>'):''}</h4>`+
+    q.o.map((o,k)=>`<div class="o ${k===right?'c':(k===gi?'w':'')}">${"ABCD"[k]}) ${esc(o)}</div>`).join('')+`<div class="exp">${esc(SECRET.exp[i])}</div></div>`});
+  let head='';
+  if(r){const p=Math.round(ok/obj*100);const lvl=p>=85?'Pronto para campo':p>=70?'Reforçar os pontos errados':'Refazer os módulos';
+    head=`<div class="panel" style="text-align:center"><div style="font-size:14px;color:var(--muted)">${esc(r.name)} · ${new Date(r.start).toLocaleString('pt-BR')} · tempo usado ${fmt(r.end-r.start)}</div><div style="margin:10px auto 0;display:inline-block;padding:6px 14px;border-radius:99px;font-size:13px;font-weight:700;${r.exits?'background:var(--err-bg);color:var(--err)':'background:var(--ok-bg);color:var(--ok)'}">${r.exits?`⚠ Saiu da página ${r.exits}x · ${fmt(r.away)} fora`:'✓ Não saiu da página'}</div><div class="big" style="margin-top:8px">${p}%</div><div>${ok} de ${obj} objetivas corretas · <b>${lvl}</b></div>
+    <table style="margin-top:14px;text-align:left">${Object.values(perB).filter(b=>!b.open).map(b=>`<tr><td>${esc(b.t)}</td><td>${b.ok}/${b.n}</td></tr>`).join('')}</table>
+    <p style="font-size:12px;color:var(--muted);margin:10px 0 0">Referência: 85%+ pronto para campo · 70 a 84% reforçar · abaixo de 70% refazer módulos. As situações práticas são avaliadas na conversa.</p></div>`}
+  $('gOut').innerHTML=head+`<div class="panel"><b>${r?'Correção detalhada':'Gabarito'}</b>${det}</div>`;
+}
+
+// BOOT
+if(S.done)showEnd();else if(S.start){if(Date.now()>=S.start+DURATION){finish(true)}else{enterExam();if(S.leftAt)markBack(true)}}else show('sStart');
+</script>
+</body>
+</html>
